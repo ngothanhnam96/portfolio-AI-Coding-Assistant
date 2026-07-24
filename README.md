@@ -1,4 +1,4 @@
-# AI Coding Assistant
+﻿# AI Coding Assistant
 
 Portfolio project for an AI-powered coding assistant API. The assistant can explain code, suggest refactors, detect bugs, generate unit-test ideas, create UML text, and summarize source files.
 
@@ -7,38 +7,46 @@ Portfolio project for an AI-powered coding assistant API. The assistant can expl
 - Explain Code: describe purpose, inputs, outputs, and execution flow.
 - Refactor: suggest clean-code improvements without changing behavior.
 - Bug Detection: identify risky patterns and likely defects.
-- Unit Test: propose practical test cases for the submitted code.
+- Unit Test: propose practical test cases for submitted code.
 - UML: generate Mermaid class or flow diagrams from code.
 - Code Summary: produce concise technical summaries.
 
 ## Tech Stack
 
-- Python 3.11+
+- Python 3.10+
 - FastAPI
 - Pydantic
 - Pytest
+- Ruff
+- Docker
+- GitHub Actions
 - Clean Architecture
 
 ## Project Structure
 
 ```text
 portfolio-AI-Coding-Assistant/
-├── app/
-│   ├── api/                 # HTTP routes and request/response schemas
-│   ├── application/         # Use cases and service orchestration
-│   ├── domain/              # Entities, value objects, interfaces
-│   ├── infrastructure/      # Analyzer implementations and adapters
-│   ├── config.py            # App settings
-│   └── main.py              # FastAPI app factory
-├── docs/
-│   ├── ARCHITECTURE.md
-│   └── API.md
-├── tests/
-│   ├── unit/
-│   └── integration/
-├── requirements.txt
-├── requirements-dev.txt
-└── pytest.ini
+|-- .github/
+|   `-- workflows/
+|       `-- ci.yml
+|-- app/
+|   |-- api/                 # HTTP routes and request/response schemas
+|   |-- application/         # Use cases and service orchestration
+|   |-- domain/              # Entities, value objects, interfaces
+|   |-- infrastructure/      # Analyzer implementations and adapters
+|   |-- config.py            # App settings
+|   `-- main.py              # FastAPI app
+|-- docs/
+|   |-- API.md
+|   `-- ARCHITECTURE.md
+|-- tests/
+|   |-- integration/
+|   `-- unit/
+|-- Dockerfile
+|-- Makefile
+|-- requirements.txt
+|-- requirements-dev.txt
+`-- pytest.ini
 ```
 
 ## Getting Started
@@ -74,12 +82,38 @@ curl -X POST http://127.0.0.1:8000/api/v1/analyze \
 | UML | `uml` |
 | Code Summary | `code_summary` |
 
-## Run Tests
+## Quality Checks
 
 ```bash
-pytest
-ruff check .
+make install
+make lint
+make test
+make ci
 ```
+
+Without Make:
+
+```bash
+python -m pip install -r requirements-dev.txt
+ruff check .
+pytest
+```
+
+## Docker
+
+```bash
+docker build -t ai-coding-assistant:local .
+docker run --rm -p 8000:8000 ai-coding-assistant:local
+```
+
+## CI/CD
+
+GitHub Actions runs on every push and pull request to `main`:
+
+- Install dependencies with pip cache.
+- Run Ruff lint checks.
+- Run Pytest test suite on Python 3.10, 3.11, and 3.12.
+- Build the Docker image after quality checks pass.
 
 ## Architecture
 

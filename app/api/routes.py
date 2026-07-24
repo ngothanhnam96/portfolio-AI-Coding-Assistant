@@ -4,7 +4,6 @@ from app.api.dependencies import get_analyze_code_use_case
 from app.application.analyze_code import AnalyzeCodeUseCase
 from app.domain.models import AnalysisResult, CodeInput
 
-
 router = APIRouter(tags=["analysis"])
 
 

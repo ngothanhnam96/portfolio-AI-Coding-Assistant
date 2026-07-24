@@ -1,4 +1,4 @@
-import ast
+﻿import ast
 import re
 from textwrap import dedent
 
@@ -67,7 +67,11 @@ class StaticCodeAnalyzer:
             "Test invalid, empty, or boundary inputs.",
             "Test error handling and expected exceptions.",
         ]
-        return self._result(code_input, "Recommended unit-test scenarios generated.", suggestions=suggestions)
+        return self._result(
+            code_input,
+            "Recommended unit-test scenarios generated.",
+            suggestions=suggestions,
+        )
 
     def _uml(self, code_input: CodeInput, code: str) -> AnalysisResult:
         functions, classes = self._python_symbols(code)
@@ -121,4 +125,7 @@ class StaticCodeAnalyzer:
             details.append(f"class(es): {', '.join(classes)}")
         if functions:
             details.append(f"function(s): {', '.join(functions)}")
-        return "Detected " + "; ".join(details) + "." if details else "No Python symbols were detected."
+        if not details:
+            return "No Python symbols were detected."
+        return "Detected " + "; ".join(details) + "."
+
